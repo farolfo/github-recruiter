@@ -13,7 +13,7 @@
 }
 
 .octocatImage {
-    background-image: url("/app/img/inspectocat.png");
+    background-image: url("./../img/inspectocat.png");
     width: 17em;
     height: 18em;
     background-size: 100% 100%;
@@ -23,7 +23,7 @@
 }
 
 .githubLogo {
-    background-image: url("/app/img/GitHub-Logo.png");
+    background-image: url("./../img/GitHub-Logo.png");
     width: 16em;
     height: 4em;
     background-size: 100% 100%;
