@@ -1,30 +1,46 @@
-/* app css stylesheet */
+.header {
+    position: relative;
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+    background-image: -moz-linear-gradient(#f9f9f9, #f3f3f3);
+    background-image: -webkit-linear-gradient(#f9f9f9, #f3f3f3);
+    background-image: linear-gradient(#f9f9f9, #f3f3f3);
+    background-repeat: repeat-x;
+
+    height: 13em;
+    width: 100%;
+
+    border-bottom: 1px solid #e5e5e5;
 }
 
-.menu:before {
-  content: "[";
+.octocatImage {
+    background-image: url("/app/img/inspectocat.png");
+    width: 17em;
+    height: 18em;
+    background-size: 100% 100%;
+    top: 0em;
+    left: 21em;
+    position: absolute;
 }
 
-.menu:after {
-  content: "]";
+.githubLogo {
+    background-image: url("/app/img/GitHub-Logo.png");
+    width: 16em;
+    height: 4em;
+    background-size: 100% 100%;
+    top: 6em;
+    left: 39em;
+    position: absolute;
 }
 
-.menu > li {
-  display: inline;
+.recruiterLogo {
+    width: 4em;
+    font-size: 5em;
+    height: 1em;
+    background-size: 100% 100%;
+    top: 1em;
+    left: 11.1em;
+    position: absolute;
+    font-family: 'Yesteryear', cursive;
+    color: rgb(33, 3, 71);
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
