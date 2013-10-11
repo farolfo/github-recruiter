@@ -12,13 +12,44 @@
     border-bottom: 1px solid #e5e5e5;
 }
 
+.headerToolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 2.5em;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.headerLabel {
+    font: 13px Helvetica, arial, freesans, clean, sans-serif;
+    text-shadow: 0 1px 0 #fff;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333333;
+    text-decoration: none;
+    float: right;
+    margin-right: 2em;
+    margin-top: 0.8em;
+    top: 1em;
+}
+
+.headerLabel:hover {
+    color: #4183c4;
+}
+
+.headerLabel.last {
+    margin-right: 6%;
+}
+
 .octocatImage {
     background-image: url("./../img/inspectocat.png");
     width: 18em;
     height: 18em;
     background-size: 100% 100%;
     top: 0em;
-    left: 21em;
+    left: 4%;
     position: absolute;
 }
 
@@ -28,7 +59,7 @@
     height: 4em;
     background-size: 100% 100%;
     top: 6em;
-    left: 39em;
+    left: 89%;
     position: absolute;
 }
 
@@ -37,8 +68,8 @@
     font-size: 5em;
     height: 1em;
     background-size: 100% 100%;
-    top: 1em;
-    left: 11.1em;
+    top: -18px;
+    left: 103%;
     position: absolute;
     font-family: 'Yesteryear', cursive;
     color: rgb(33, 3, 71);
