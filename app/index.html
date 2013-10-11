@@ -1,11 +1,20 @@
 <!doctype html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="githubRecruiter">
 <head>
-  <meta charset="utf-8">
-  <title>GitHub recruiter</title>
-  <link rel="stylesheet" href="css/normalize.css"/>
-  <link rel="stylesheet" href="css/app.css"/>
-  <link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <title>GitHub recruiter</title>
+
+    <link rel="stylesheet" href="css/normalize.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
 </head>
 <body>
   <div class="header">
@@ -15,6 +24,19 @@
           <a class="headerLabel" href="#">Get started</a>
       </div>
       <div class="octocatImage"><div class="githubLogo"><div class="recruiterLogo">recruiter</div></div></div>
+  </div>
+
+  <div class="searchContainer" ng-controller="searchController">
+      <ul class="nav nav-tabs">
+          <li class="active" ng-click="switchTab($event)"><a href="">Organization</a></li>
+          <li ng-click="switchTab($event)"><a href="">Repository</a></li>
+      </ul>
+      <div class="formContainer">
+          <div class="inputContainer">
+            <input type="query" id="query" class="form-control" placeholder="Enter your organization's name. i.e.: Mulesoft" ng-model="query">
+          </div>
+          <button type="submit" class="btn btn-primary" ng-click="search()">Search</button>
+      </div>
   </div>
 
   <!-- In production use:

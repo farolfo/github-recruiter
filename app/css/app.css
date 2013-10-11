@@ -37,6 +37,7 @@
 
 .headerLabel:hover {
     color: #4183c4;
+    text-decoration: none;
 }
 
 .headerLabel.last {
@@ -75,3 +76,30 @@
     color: rgb(33, 3, 71);
 }
 
+.searchContainer {
+    min-width: 29em;
+    width: 50%;
+    margin: 4.5em auto auto auto;
+    padding-bottom: 2em;
+}
+
+.searchContainer .formContainer{
+    margin-top: 2em;
+    margin-left: 2em;
+    margin-right: 2em;
+    position: relative;
+}
+
+.searchContainer .formContainer .inputContainer {
+    position: absolute;
+    right: 6em;
+    left: 0;
+    top: 0;
+}
+
+
+.searchContainer .formContainer button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
