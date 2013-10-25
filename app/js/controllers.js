@@ -1,37 +1,44 @@
 'use strict';
 
-var myApp = angular.module('githubRecruiter', []);
+var myApp = angular.module('githubRecruiter', ['ui.router']);
 
-var placeholder = function(tabName) {
-    var placeholder = '';
-    if ( tabName === 'Organization' ) {
-        placeholder = "Enter your organization's name. i.e.: Mulesoft";
-    } else if ( tabName === 'Repository' ) {
-        placeholder = "Enter a repository's name. i.e.: mule";
-    }
-    return placeholder;
-};
+myApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-myApp.controller('searchController', ['$scope', function($scope){
+    $urlRouterProvider.otherwise("/organization");
 
-    $scope.query = '';
-    $scope.searchBy = 'Organization';
+    $stateProvider
+        .state('organization', {
+            url: "/organization",
+            templateUrl: "partials/organization.html",
+            controller: function($scope) {
+                switchTab('organizationTab');
 
-    $scope.queryInput = $('#query');
+                $scope.query = '';
 
-    $scope.search = function() {
-        console.log($scope.query);
-    };
+                $scope.search = function() {
+                    console.log($scope.query);
+                };
+            }
+        })
+        .state('repository', {
+            url: "/repository",
+            templateUrl: "partials/repository.html",
+            controller: function($scope) {
+                switchTab('repositoryTab');
 
-    $scope.switchTab = function(e) {
-        var target = $(e.currentTarget),
-            currentActive = $('.searchContainer').find('li.active');
+                $scope.query = '';
 
-        $scope.searchBy = target.find('a').text();
-
-        currentActive.removeClass('active');
-        target.addClass('active');
-
-        $scope.queryInput.attr('placeholder', placeholder($scope.searchBy));
-    };
+                $scope.search = function() {
+                    console.log($scope.query);
+                };
+            }
+        })
 }]);
+
+var switchTab = function(activeClassName) {
+    var target = $('.' + activeClassName),
+        currentActive = $('.searchContainer').find('li.active');
+
+    currentActive.removeClass('active');
+    target.addClass('active');
+};

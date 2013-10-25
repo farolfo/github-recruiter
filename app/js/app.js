@@ -1,10 +1,21 @@
-'use strict';
+/*'use strict';
 
+var myApp = angular.module('githubRecruiter', ['ui.router']);
 
-// Declare app level module which depends on filters, and services
-angular.module('myApp', ['githubRecruiter.filters', 'githubRecruiter.services', 'githubRecruiter.directives', 'githubRecruiter.controllers']).
-  config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: 'MyCtrl1'});
-    $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
-    $routeProvider.otherwise({redirectTo: '/view1'});
-  }]);
+myApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    //
+    debugger
+    // For any unmatched url, redirect to /state1
+    $urlRouterProvider.otherwise("/organization");
+    //
+    // Now set up the states
+    $stateProvider
+        .state('organization', {
+            url: "/organization",
+            templateUrl: "partials/organization.html"
+        })
+        .state('repository', {
+            url: "/repository",
+            templateUrl: "partials/repository.html"
+        })
+}]);   */

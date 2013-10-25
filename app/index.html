@@ -28,23 +28,19 @@
       <div class="octocatImage"><div class="githubLogo"><div class="recruiterLogo">recruiter</div></div></div>
   </div>
 
-  <div class="searchContainer" ng-controller="searchController">
+  <div class="searchContainer">
       <ul class="nav nav-tabs">
-          <li class="active" ng-click="switchTab($event)"><a href="">Organization</a></li>
-          <li ng-click="switchTab($event)"><a href="">Repository</a></li>
+          <li class="organizationTab"><a ui-sref="organization">Organization</a></li>
+          <li class="repositoryTab"><a ui-sref="repository">Repository</a></li>
       </ul>
-      <div class="formContainer">
-          <div class="inputContainer">
-            <input type="query" id="query" class="form-control" placeholder="Enter your organization's name. i.e.: Mulesoft" ng-model="query">
-          </div>
-          <button type="submit" class="btn btn-primary" ng-click="search()">Search</button>
-      </div>
+      <div ui-view></div>
   </div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
   <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular/angular-ui-router.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
