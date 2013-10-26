@@ -1,9 +1,5 @@
 'use strict';
 
-/* Services */
+var myModule = angular.module('githubRecruiter.services', []);
 
 
-// Demonstrate how to register services
-// In this case it is a simple value service.
-angular.module('githubRecruiter.services', []).
-  value('version', '0.1');
