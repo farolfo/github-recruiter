@@ -18,7 +18,7 @@
 
     <link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
 </head>
-<body>
+<body ng-controller="githubRecruiterCtrl">
   <div class="header">
       <div class="headerToolbar">
           <a class="headerLabel last" href="#">About</a>
@@ -34,6 +34,12 @@
           <li class="repositoryTab"><a ui-sref="repository">Repository</a></li>
       </ul>
       <div ui-view></div>
+  </div>
+
+  <div id="resultsContainer">
+      <div ng-repeat="result in results">
+          <search-result result="result"></search-result>
+      </div>
   </div>
 
   <!-- In production use:

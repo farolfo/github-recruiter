@@ -2,10 +2,5 @@
 
 /* Directives */
 
+angular.module('githubRecruiter.directives', []);
 
-angular.module('githubRecruiter.directives', []).
-  directive('appVersion', ['version', function(version) {
-    return function(scope, elm, attrs) {
-      elm.text(version);
-    };
-  }]);
