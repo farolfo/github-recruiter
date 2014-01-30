@@ -132,7 +132,25 @@ myApp.directive('searchResult', function () {
         templateUrl: './partials/directives/searchResult.html',
 
         link: function(scope) {
+        }
+    };
+});
 
+myApp.directive('searchInLinkedin', function () {
+    return {
+        restrict: 'E',
+
+        scope: {
+            name: '='
+        },
+
+        templateUrl: './partials/directives/searchInLinkedin.html',
+
+        link: function(scope) {
+            var linkedinUrl = "http://www.linkedin.com/vsearch/f?type=all&keywords=",
+                keywords = scope.name.replace(" ","+");
+
+            scope.searchUrl = linkedinUrl + keywords;
         }
     };
 });

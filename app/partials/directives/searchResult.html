@@ -1,5 +1,10 @@
-<div>
-    Name: {{result.name}}
-    Email: {{result.email}}
-    <img ng-src="{{result.avatar_url}}" alt="Img" class="img-rounded">
+<div class="search-result">
+    <img ng-src="{{result.avatar_url}}" class="img-rounded">
+    <div class="result-info">
+        <label class="name">{{result.name}}</label>
+        <label class="email">{{result.email}}</label>
+    </div>
+    <div class="search-linkedin-container">
+        <search-in-linkedin name="result.name"></search-in-linkedin>
+    </div>
 </div>
