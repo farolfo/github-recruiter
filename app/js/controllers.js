@@ -1,6 +1,6 @@
 'use strict';
 
-var myApp = angular.module('githubRecruiter', ['ui.router']);
+var myApp = angular.module('githubRecruiter', ['ui.router', 'ngResource']);
 
 myApp.factory('resultsSharedService', ['$rootScope', function ($rootScope) {
     var sharedService = {};
@@ -19,6 +19,86 @@ myApp.factory('resultsSharedService', ['$rootScope', function ($rootScope) {
     return sharedService;
 }]);
 
+var githubUrl = "https://api.github.com";
+
+myApp.factory('TokenHandler', function() {
+    var tokenHandler = {};
+    var token = "ae0da3e43e7d1c6f68e150e38269f22c38c5e006";
+
+    tokenHandler.set = function( newToken ) {
+        token = newToken;
+    };
+
+    tokenHandler.get = function() {
+        return token;
+    };
+
+    // wrap given actions of a resource to send auth token with every
+    // request
+    tokenHandler.wrapActions = function( resource, actions ) {
+        // copy original resource
+        var wrappedResource = resource;
+        for (var i=0; i < actions.length; i++) {
+            tokenWrapper( wrappedResource, actions[i] );
+        };
+        // return modified copy of resource
+        return wrappedResource;
+    };
+
+    // wraps resource action to send request with auth token
+    var tokenWrapper = function( resource, action ) {
+        // copy original action
+        resource['_' + action]  = resource[action];
+        // create new action wrapping the original and sending token
+        resource[action] = function( data, success, error){
+            return resource['_' + action](
+                angular.extend({}, data || {}, {access_token: tokenHandler.get()}),
+                success,
+                error
+            );
+        };
+    };
+
+    return tokenHandler;
+});
+
+myApp.factory('$users', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
+    var resource = $resource(githubUrl + '/users/:user', {user: '@user'});
+    resource = tokenHandler.wrapActions( resource, ["query", "get"] );
+    return resource;
+}]);
+
+myApp.factory('$collaborators', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
+    var resource = $resource(githubUrl + '/repos/:owner/:repo/collaborators', {owner: '@owner', repo: '@repo'});
+    resource = tokenHandler.wrapActions( resource, ["query", "get"] );
+    return resource;
+}]);
+
+myApp.factory('$stargazers', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
+    var resource = $resource(githubUrl + '/repos/:owner/:repo/stargazers', {owner: '@owner', repo: '@repo'});
+    resource = tokenHandler.wrapActions( resource, ["query", "get"] );
+    return resource;
+}]);
+
+
+myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$stargazers', function($users, $collaborators, $stargazers) {
+    return {
+        searchByRepo: function(owner, repo, callback) {
+            $collaborators.query({repo: repo, owner: owner}, function(collaborators) {
+                var users = [];
+                collaborators.forEach(function(collaborator) {
+                    $users.get({user: collaborator.login}, function(user) {
+                        users.push(user);
+                    });
+                });
+                callback(users);
+            });
+        }
+    };
+}]);
+
+
+
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
 
     $urlRouterProvider.otherwise("/organization");
@@ -33,89 +113,20 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                 $scope.query = '';
 
                 $scope.search = function() {
-
-                    $scope.results = [
-                        {
-                            "login": "farolfo",
-                            "id": 1851436,
-                            "avatar_url": "https://gravatar.com/avatar/89a6ff37b19102deccfc22a64bfffbfe?d=https%3A%2F%2Fidenticons.github.com%2F99308d7f3a7157a105b189a89f3b2942.png&r=x",
-                            "gravatar_id": "89a6ff37b19102deccfc22a64bfffbfe",
-                            "url": "https://api.github.com/users/farolfo",
-                            "html_url": "https://github.com/farolfo",
-                            "followers_url": "https://api.github.com/users/farolfo/followers",
-                            "following_url": "https://api.github.com/users/farolfo/following{/other_user}",
-                            "gists_url": "https://api.github.com/users/farolfo/gists{/gist_id}",
-                            "starred_url": "https://api.github.com/users/farolfo/starred{/owner}{/repo}",
-                            "subscriptions_url": "https://api.github.com/users/farolfo/subscriptions",
-                            "organizations_url": "https://api.github.com/users/farolfo/orgs",
-                            "repos_url": "https://api.github.com/users/farolfo/repos",
-                            "events_url": "https://api.github.com/users/farolfo/events{/privacy}",
-                            "received_events_url": "https://api.github.com/users/farolfo/received_events",
-                            "type": "User",
-                            "site_admin": false,
-                            "name": "Franco Arolfo",
-                            "company": null,
-                            "blog": null,
-                            "location": null,
-                            "email": "francoarolfo@hotmail.com",
-                            "hireable": false,
-                            "bio": null,
-                            "public_repos": 18,
-                            "public_gists": 0,
-                            "followers": 8,
-                            "following": 19,
-                            "created_at": "2012-06-14T18:48:07Z",
-                            "updated_at": "2014-01-29T01:02:59Z"
-                        },
-                        {
-                            "login": "tgriesser",
-                            "id": 154748,
-                            "avatar_url": "https://gravatar.com/avatar/fb5d018725ccbe7c4359e29edddb201d?d=https%3A%2F%2Fidenticons.github.com%2F2d6b98b1665c939f8acce7bef72c2d13.png&r=x",
-                            "gravatar_id": "fb5d018725ccbe7c4359e29edddb201d",
-                            "url": "https://api.github.com/users/tgriesser",
-                            "html_url": "https://github.com/tgriesser",
-                            "followers_url": "https://api.github.com/users/tgriesser/followers",
-                            "following_url": "https://api.github.com/users/tgriesser/following{/other_user}",
-                            "gists_url": "https://api.github.com/users/tgriesser/gists{/gist_id}",
-                            "starred_url": "https://api.github.com/users/tgriesser/starred{/owner}{/repo}",
-                            "subscriptions_url": "https://api.github.com/users/tgriesser/subscriptions",
-                            "organizations_url": "https://api.github.com/users/tgriesser/orgs",
-                            "repos_url": "https://api.github.com/users/tgriesser/repos",
-                            "events_url": "https://api.github.com/users/tgriesser/events{/privacy}",
-                            "received_events_url": "https://api.github.com/users/tgriesser/received_events",
-                            "type": "User",
-                            "site_admin": false,
-                            "name": "Tim Griesser",
-                            "company": "",
-                            "blog": "",
-                            "location": "Cambridge, MA",
-                            "email": "tgriesser@gmail.com",
-                            "hireable": false,
-                            "bio": null,
-                            "public_repos": 22,
-                            "public_gists": 27,
-                            "followers": 98,
-                            "following": 0,
-                            "created_at": "2009-11-18T09:21:13Z",
-                            "updated_at": "2014-01-28T23:28:33Z"
-                        }
-                    ];
-
-                    resultsSharedService.prepForBroadcast($scope.results);
-
                 };
             }
         })
         .state('repository', {
             url: "/repository",
             templateUrl: "partials/repository.html",
-            controller: function($scope) {
+            controller: function($scope, $githubRecruiter, resultsSharedService) {
                 switchTab('repositoryTab');
 
-                $scope.query = '';
-
                 $scope.search = function() {
-                    console.log($scope.query);
+                    $githubRecruiter.searchByRepo($scope.owner, $scope.repo, function(results) {
+                        $scope.results = results;
+                        resultsSharedService.prepForBroadcast($scope.results);
+                    });
                 };
             }
         })
@@ -129,10 +140,7 @@ myApp.directive('searchResult', function () {
             result: '='
         },
 
-        templateUrl: './partials/directives/searchResult.html',
-
-        link: function(scope) {
-        }
+        templateUrl: './partials/directives/searchResult.html'
     };
 });
 
