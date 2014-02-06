@@ -22,16 +22,16 @@
 <body ng-controller="githubRecruiterCtrl">
   <div class="header">
       <div class="headerToolbar">
-          <a class="headerLabel last" href="#">About</a>
-          <a class="headerLabel" href="#">Developers</a>
-          <a class="headerLabel" href="#">Get started</a>
+          <a class="headerLabel last">About</a>
+          <a class="headerLabel">Developers</a>
+          <a class="headerLabel">Get started</a>
       </div>
       <div class="octocatImage"><div class="githubLogo"><div class="recruiterLogo">recruiter</div></div></div>
   </div>
 
   <div class="searchContainer">
       <ul class="nav nav-tabs">
-          <li class="organizationTab"><a ui-sref="organization">by organization</a></li>
+          <li class="organizationTab disabled"><a>by organization</a></li>
           <li class="repositoryTab"><a ui-sref="repository">by repository</a></li>
       </ul>
       <div ui-view></div>
