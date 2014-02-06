@@ -80,19 +80,104 @@ myApp.factory('$stargazers', ['$resource', 'TokenHandler', function($resource, t
     return resource;
 }]);
 
+myApp.factory('$repositories', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
+    var resource = $resource(githubUrl + '/orgs/:org/repos', {org: '@org'});
+    resource = tokenHandler.wrapActions( resource, ["query", "get"] );
+    return resource;
+}]);
 
-myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$stargazers', function($users, $collaborators, $stargazers) {
-    return {
-        searchByRepo: function(owner, repo, callback) {
+
+myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', function($users, $collaborators, $repositories, $stargazers, $q) {
+    var searchByRepo = function(owner, repo, knownCollaborators) {
+            var deferred = $q.defer();
+
+            knownCollaborators = ( knownCollaborators === undefined ? {} : knownCollaborators );
+
             $collaborators.query({repo: repo, owner: owner}, function(collaborators) {
-                var users = [];
+                var users = [],
+                    collaboratorsPending = collaborators.length,
+                    checkIfFinished = function() {
+                        collaboratorsPending--;
+                        if ( collaboratorsPending === 0 ) {
+                            console.log('resolved repo ' + repo);
+                            deferred.resolve(users);
+                        }
+                    };
+
                 collaborators.forEach(function(collaborator) {
-                    $users.get({user: collaborator.login}, function(user) {
-                        users.push(user);
-                    });
+                    var userPromise;
+
+                    if ( ! isAKnownCollaborator(collaborator, knownCollaborators) ) {
+                        userPromise = getUser(collaborator);
+                        markCollaboratorAsKnown(collaborator, knownCollaborators);
+                    } else {
+                        checkIfFinished();
+                    }
+
+                    if ( userPromise !== undefined ) {
+                        userPromise.then(
+                        function(user) {
+                            users.push(user);
+                            checkIfFinished();
+                        }, checkIfFinished);
+                    }
                 });
-                callback(users);
             });
+
+            return deferred.promise;
+        },
+        isAKnownCollaborator = function(collaborator, knownCollaborators) {
+            return knownCollaborators[collaborator.login];
+        },
+        markCollaboratorAsKnown = function(collaborator, knownCollaborators) {
+            knownCollaborators[collaborator.login] = true;
+        },
+        getUser = function(collaborator) {
+            var deferred = $q.defer();
+            $users.get({user: collaborator.login}, function(user) {
+                if ( user.name || user.email ) {
+                    console.log('resolving user ' + user.name);
+                    deferred.resolve(user);
+                } else {
+                    deferred.reject();
+                }
+            });
+            return deferred.promise;
+        };
+
+    return {
+        searchByRepo: searchByRepo,
+
+        searchByOrg: function(organization) {
+            var deferred = $q.defer(),
+                users = [],
+                knownCollaborators = {};
+
+            $repositories.query({org: organization}, function(repositories) {
+                var repositoriesPending = repositories.length,
+                    checkIfFinished = function() {
+                        console.log("repository " + repositoriesPending);
+                        repositoriesPending--;
+                        if ( repositoriesPending === 0 ) {
+                            console.log("resolved organization");
+                            deferred.resolve(users);
+                        }
+                    };
+
+                repositories.forEach(function(repo) {
+                    var repoPromise = searchByRepo(repo.owner.login, repo.name, knownCollaborators);
+
+                    repoPromise.then(
+                        function(newUsers) {
+                            users = users.concat(newUsers);
+                            checkIfFinished();
+                        },
+                        checkIfFinished
+                    );
+                });
+            });
+
+            return deferred.promise;
         }
     };
 }]);
@@ -107,12 +192,17 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
         .state('organization', {
             url: "/organization",
             templateUrl: "partials/organization.html",
-            controller: function($scope, resultsSharedService) {
+            controller: function($scope, $githubRecruiter, resultsSharedService) {
                 switchTab('organizationTab');
 
-                $scope.query = '';
+                $scope.organization = '';
 
                 $scope.search = function() {
+                    var promise = $githubRecruiter.searchByOrg($scope.organization);
+                    promise.then(function(results) {
+                        $scope.results = results;
+                        resultsSharedService.prepForBroadcast($scope.results);
+                    });
                 };
             }
         })
@@ -123,7 +213,8 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                 switchTab('repositoryTab');
 
                 $scope.search = function() {
-                    $githubRecruiter.searchByRepo($scope.owner, $scope.repo, function(results) {
+                    var promise = $githubRecruiter.searchByRepo($scope.owner, $scope.repo);
+                    promise.then(function(results) {
                         $scope.results = results;
                         resultsSharedService.prepForBroadcast($scope.results);
                     });
