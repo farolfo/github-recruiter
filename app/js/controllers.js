@@ -186,10 +186,14 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
 
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
 
-    $urlRouterProvider.otherwise("/organization");
+    $urlRouterProvider.otherwise("search/organization");
 
     $stateProvider
-        .state('organization', {
+        .state('search', {
+            url: "/search",
+            templateUrl: "partials/search.html"
+        })
+        .state('search.organization', {
             url: "/organization",
             templateUrl: "partials/organization.html",
             controller: function($scope, $githubRecruiter, resultsSharedService) {
@@ -206,7 +210,7 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                 };
             }
         })
-        .state('repository', {
+        .state('search.repository', {
             url: "/repository",
             templateUrl: "partials/repository.html",
             controller: function($scope, $githubRecruiter, resultsSharedService) {
@@ -219,6 +223,13 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                         resultsSharedService.prepForBroadcast($scope.results);
                     });
                 };
+            }
+        })
+        .state('about', {
+            url: "/about",
+            templateUrl: "partials/about.html",
+            controller: function($scope) {
+
             }
         })
 }]);
