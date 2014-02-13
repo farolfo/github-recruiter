@@ -80,6 +80,18 @@ myApp.factory('$stargazers', ['$resource', 'TokenHandler', function($resource, t
     return resource;
 }]);
 
+myApp.factory('$watchers', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
+    var resource = $resource(githubUrl + '/repos/:owner/:repo/subscribers', {owner: '@owner', repo: '@repo'});
+    resource = tokenHandler.wrapActions( resource, ["query", "get"] );
+    return resource;
+}]);
+
+myApp.factory('$organizations', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
+    var resource = $resource(githubUrl + '/users/:user/orgs', {user: '@user'});
+    resource = tokenHandler.wrapActions( resource, ["query", "get"] );
+    return resource;
+}]);
+
 myApp.factory('$repositories', ['$resource', 'TokenHandler', function($resource, tokenHandler) {
     var resource = $resource(githubUrl + '/orgs/:org/repos', {org: '@org'});
     resource = tokenHandler.wrapActions( resource, ["query", "get"] );
@@ -87,7 +99,7 @@ myApp.factory('$repositories', ['$resource', 'TokenHandler', function($resource,
 }]);
 
 
-myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', function($users, $collaborators, $repositories, $stargazers, $q) {
+myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', '$organizations', function($users, $collaborators, $repositories, $stargazers, $q, $organizations) {
     var searchByRepo = function(owner, repo, knownCollaborators) {
             var deferred = $q.defer();
 
@@ -137,7 +149,10 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
             $users.get({user: collaborator.login}, function(user) {
                 if ( user.name || user.email ) {
                     console.log('resolving user ' + user.name);
-                    deferred.resolve(user);
+                    $organizations.query({user: user.login}, function(orgs) {
+                        user.organizations = orgs;
+                        deferred.resolve(user);
+                    });
                 } else {
                     deferred.reject();
                 }
@@ -191,7 +206,17 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
     $stateProvider
         .state('search', {
             url: "/search",
-            templateUrl: "partials/search.html"
+            templateUrl: "partials/search.html",
+            controller: function($scope, resultsSharedService) {
+                $scope.$on('searchInProgress', function() {
+                    $scope.recruiting = true;
+                });
+
+                $scope.$on('resultsBroadcast', function () {
+                    $scope.results = resultsSharedService.results;
+                    $scope.recruiting = false;
+                });
+            }
         })
         .state('search.organization', {
             url: "/organization",
@@ -202,6 +227,8 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                 $scope.organization = '';
 
                 $scope.search = function() {
+                    $scope.$emit('searchInProgress');
+
                     var promise = $githubRecruiter.searchByOrg($scope.organization);
                     promise.then(function(results) {
                         $scope.results = results;
@@ -217,6 +244,8 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                 switchTab('repositoryTab');
 
                 $scope.search = function() {
+                    $scope.$emit('searchInProgress');
+
                     var promise = $githubRecruiter.searchByRepo($scope.owner, $scope.repo);
                     promise.then(function(results) {
                         $scope.results = results;
@@ -265,12 +294,6 @@ myApp.directive('searchInLinkedin', function () {
     };
 });
 
-myApp.controller('githubRecruiterCtrl', ['$scope', 'resultsSharedService', function($scope, resultsSharedService) {
-    $scope.$on('resultsBroadcast', function () {
-        $scope.results = resultsSharedService.results;
-    });
-}]);
-
 var switchTab = function(activeClassName) {
     var target = $('.' + activeClassName),
         currentActive = $('.searchContainer').find('li.active');
@@ -278,3 +301,85 @@ var switchTab = function(activeClassName) {
     currentActive.removeClass('active');
     target.addClass('active');
 };
+
+myApp.filter('notInOrganization', function() {
+    return function(users, organization, enabled) {
+        if( ! enabled || ! users || ! organization) {
+            return users;
+        }
+
+        var out = [];
+        users.forEach(function(user) {
+            if ( user.organizations ) {
+                var isInOrganization = false;
+                user.organizations.forEach(function(org) {
+                    if ( org.login.toLowerCase() === organization.toLowerCase() ) {
+                        isInOrganization = true;
+                        console.log('User ' + user.name + ' is in org ' + org.login);
+                    }
+                });
+                if ( ! isInOrganization ) {
+                    console.log('User ' + user.name + ' is not in org ' + organization);
+                    out.push(user);
+                }
+            } else {
+                console.log('User ' + user.name + ' is not in any org');
+                out.push(user);
+            }
+        });
+
+        return out;
+    }
+});
+
+/*
+myApp.filter('collaborator', function() {
+    return function(input, enabled) {
+        if( ! enabled ) {
+            return input;
+        }
+
+        var out = [];
+        input.forEach(function(item) {
+            if ( item.collaborator ) {
+                out.push(item);
+            }
+        });
+
+        return out;
+    }
+});
+
+myApp.filter('watcher', function() {
+    return function(input, enabled) {
+        if( ! enabled ) {
+            return input;
+        }
+
+        var out = [];
+        input.forEach(function(item) {
+            if ( item.collaborator ) {
+                out.push(item);
+            }
+        });
+
+        return out;
+    }
+});
+
+myApp.filter('stargazer', function() {
+    return function(input, enabled) {
+        if( ! enabled ) {
+            return input;
+        }
+
+        var out = [];
+        input.forEach(function(item) {
+            if ( item.collaborator ) {
+                out.push(item);
+            }
+        });
+
+        return out;
+    }
+});  */
