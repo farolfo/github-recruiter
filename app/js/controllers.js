@@ -99,13 +99,13 @@ myApp.factory('$repositories', ['$resource', 'TokenHandler', function($resource,
 }]);
 
 
-myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', '$organizations', function($users, $collaborators, $repositories, $stargazers, $q, $organizations) {
+myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', '$organizations', '$watchers', function($users, $collaborators, $repositories, $stargazers, $q, $organizations, $watchers) {
     var searchByRepo = function(owner, repo, knownCollaborators) {
             var deferred = $q.defer();
 
             knownCollaborators = ( knownCollaborators === undefined ? {} : knownCollaborators );
 
-            $collaborators.query({repo: repo, owner: owner}, function(collaborators) {
+            $watchers.query({repo: repo, owner: owner}, function(collaborators) {
                 var users = [],
                     collaboratorsPending = collaborators.length,
                     checkIfFinished = function() {
@@ -287,7 +287,7 @@ myApp.directive('searchInLinkedin', function () {
 
         link: function(scope) {
             var linkedinUrl = "http://www.linkedin.com/vsearch/f?type=all&keywords=",
-                keywords = scope.name.replace(" ","+");
+                keywords = scope.name ? scope.name.replace(" ","+") : scope.email;
 
             scope.searchUrl = linkedinUrl + keywords;
         }
