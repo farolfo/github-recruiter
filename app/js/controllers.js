@@ -262,17 +262,19 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
 
 }]);
 
-myApp.factory('globalInterceptor', function($q){
+myApp.factory('globalInterceptor', ['$q', '$injector', function($q, $injector){
     return function(promise){
 
         return promise.then(function(response){
             return response;
         }, function(response){
-            debugger
+            if ( response.status === 403 ) {
+                $injector.get('$state').transitionTo('error.forbidden');
+            }
             return $q.reject(response);
         });
     }
-});
+}]);
 
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
 
@@ -293,6 +295,18 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
                     $scope.results = resultsSharedService.results;
                     $scope.recruiting = false;
                 });
+            }
+        })
+        .state('error', {
+            url: "/error",
+            templateUrl: "partials/error.forbidden.html",
+            controller: function($scope) {
+            }
+        })
+        .state('error.forbidden', {
+            url: "/error/forbidden",
+            templateUrl: "partials/error.forbidden.html",
+            controller: function($scope) {
             }
         })
         .state('search.organization', {

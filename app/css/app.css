@@ -76,6 +76,33 @@
     color: rgb(33, 3, 71);
 }
 
+#errorContainer {
+    width: 60em;
+    height: 17em;
+    position: relative;
+    margin: auto;
+    margin-top: 6em;
+}
+
+#errorContainer img {
+    width: 17em;
+    position: absolute;
+    top: 0;
+    left: 1em;
+}
+
+#errorContainer h3 {
+    position: absolute;
+    top: 1.5em;
+    left: 11em;
+}
+
+#errorContainer p {
+    position: absolute;
+    top: 6.4em;
+    left: 19em;
+}
+
 .searchContainer {
     min-width: 29em;
     width: 50%;
