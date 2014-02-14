@@ -90,6 +90,12 @@
     position: relative;
 }
 
+.searchContainer .formContainer .message{
+    position: absolute;
+    left: 0.5em;
+    top: 3.2em;
+}
+
 .searchContainer .formContainer .inputContainer {
     position: absolute;
     right: 6em;
@@ -151,6 +157,7 @@
     left: 2.5em;
     width: 8em;
     height: 8em;
+    border: 1px solid rgb(197, 197, 201);
 }
 
 #resultsContainer .search-result .name {
@@ -165,14 +172,40 @@
     left: 11.5em;
 }
 
+#resultsContainer .search-result .login {
+    position: absolute;
+    top: 4.5em;
+    left: 13.5em;
+}
+
+#resultsContainer .search-result .company {
+    position: absolute;
+    top: 5.8em;
+    left: 13.5em;
+}
+
 #resultsContainer .search-result .search-linkedin-container {
     position: absolute;
     top: 0.5em;
     right: 1em;
 }
 
+#resultsContainer .search-result .search-github-container {
+    position: absolute;
+    top: 2em;
+    right: 1em;
+}
+
 #resultsContainer .search-result .search-linkedin-container i {
     font-size: 1.1em;
+}
+
+.resume {
+    font-weight: 300;
+    width: 65em;
+    position: absolute;
+    top: 10.5em;
+    left: 20em;
 }
 
 .spinner {

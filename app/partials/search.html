@@ -1,8 +1,8 @@
 <div>
     <div class="searchContainer">
         <ul class="nav nav-tabs">
-            <li class="organizationTab disabled"><a>by organization</a></li>
-            <li class="repositoryTab"><a ui-sref="search.repository">by repository</a></li>
+            <li class="organizationTab"><a ui-sref="search.organization">by Organization</a></li>
+            <li class="repositoryTab"><a ui-sref="search.repository">by Repository</a></li>
         </ul>
         <div ui-view></div>
     </div>
@@ -30,21 +30,6 @@ border-top-right-radius: 10px;" ng-show="results">
                 <small class="warn">This will only work for those users who have their organization as public data</small>
             </div>
         </form>
-        <div class="checkbox">
-            <small>
-                <input type="checkbox" ng-model="collaborators"> Collaborators
-            </small>
-        </div>
-        <div class="checkbox">
-            <small>
-                <input type="checkbox" ng-model="watchers"> Watchers
-            </small>
-        </div>
-        <div class="checkbox">
-            <small>
-                <input type="checkbox" ng-model="stargazers"> Stargazers
-            </small>
-        </div>
     </div>
 
     <div id="resultsContainer">

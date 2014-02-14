@@ -23,7 +23,7 @@ var githubUrl = "https://api.github.com";
 
 myApp.factory('TokenHandler', function() {
     var tokenHandler = {};
-    var token = "ae0da3e43e7d1c6f68e150e38269f22c38c5e006";
+    var token = "d588acf155c56cef36ea7142e258d934f1909258";
 
     tokenHandler.set = function( newToken ) {
         token = newToken;
@@ -98,12 +98,12 @@ myApp.factory('$repositories', ['$resource', 'TokenHandler', function($resource,
     return resource;
 }]);
 
-
+     /*
 myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', '$organizations', '$watchers', function($users, $collaborators, $repositories, $stargazers, $q, $organizations, $watchers) {
-    var searchByRepo = function(owner, repo, knownCollaborators) {
+    var searchByRepo = function(owner, repo, knownLogins) {
             var deferred = $q.defer();
 
-            knownCollaborators = ( knownCollaborators === undefined ? {} : knownCollaborators );
+            knownLogins = ( knownLogins === undefined ? {} : knownLogins );
 
             $watchers.query({repo: repo, owner: owner}, function(collaborators) {
                 var users = [],
@@ -119,9 +119,9 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
                 collaborators.forEach(function(collaborator) {
                     var userPromise;
 
-                    if ( ! isAKnownCollaborator(collaborator, knownCollaborators) ) {
+                    if ( ! isAKnownLogin(collaborator, knownLogins) ) {
                         userPromise = getUser(collaborator);
-                        markCollaboratorAsKnown(collaborator, knownCollaborators);
+                        markLoginAsKnown(collaborator, knownLogins);
                     } else {
                         checkIfFinished();
                     }
@@ -138,11 +138,11 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
 
             return deferred.promise;
         },
-        isAKnownCollaborator = function(collaborator, knownCollaborators) {
-            return knownCollaborators[collaborator.login];
+        isAKnownLogin = function(collaborator, knownLogins) {
+            return knownLogins[collaborator.login];
         },
-        markCollaboratorAsKnown = function(collaborator, knownCollaborators) {
-            knownCollaborators[collaborator.login] = true;
+        markLoginAsKnown = function(collaborator, knownLogins) {
+            knownLogins[collaborator.login] = true;
         },
         getUser = function(collaborator) {
             var deferred = $q.defer();
@@ -166,7 +166,7 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
         searchByOrg: function(organization) {
             var deferred = $q.defer(),
                 users = [],
-                knownCollaborators = {};
+                knownLogins = {};
 
             $repositories.query({org: organization}, function(repositories) {
                 var repositoriesPending = repositories.length,
@@ -180,7 +180,7 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
                     };
 
                 repositories.forEach(function(repo) {
-                    var repoPromise = searchByRepo(repo.owner.login, repo.name, knownCollaborators);
+                    var repoPromise = searchByRepo(repo.owner.login, repo.name, knownLogins);
 
                     repoPromise.then(
                         function(newUsers) {
@@ -195,6 +195,170 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
             return deferred.promise;
         }
     };
+}]);         */
+
+var PromiseChain = function(callback) {
+    var promisesLeft = 0;
+
+    return {
+        addPromise: function(promise) {
+            promisesLeft++;
+
+            var decPromise = function() {
+                promisesLeft--;
+                if ( promisesLeft === 0 ) {
+                    callback();
+                }
+            };
+
+            promise.then(decPromise, decPromise);
+        }
+    };
+};
+
+myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', '$organizations', '$watchers', function($users, $collaborators, $repositories, $stargazers, $q, $organizations, $watchers) {
+
+    var searchByRepo = function(owner, repo, knownLogins) {
+        var mainDeferred = $q.defer(),
+            mainUsers = [];
+
+        knownLogins = (knownLogins === undefined ? {} : knownLogins);
+
+        var markLoginAsKnown = function(login) {
+            console.log("---- Marking " + login + " as known");
+            knownLogins[login] = true;
+        };
+
+        var populateUsersData = function(users, deferred, userType) {
+            var promiseChain = new PromiseChain(function() {
+                deferred.resolve();
+            });
+
+            users.forEach(function(user) {
+                var p = populateUserData(user, userType);
+                promiseChain.addPromise(p);
+            });
+        };
+
+        var populateUserData = function(user, userType) {
+            var localDeferred = $q.defer();
+            $users.get({user: user.login}, function(u) {
+                $organizations.query({user: user.login}, function(orgs) {
+                    u.organizations = orgs;
+                    u.userType = userType;
+                    mainUsers.push(u);
+                    localDeferred.resolve();
+                });
+            });
+            return localDeferred.promise;
+        };
+
+        var isAKnownUser = function(user) {
+            if ( knownLogins[user.login] ) {
+                return true;
+            }
+            return false;
+        };
+
+        var filterUsed = function(users) {
+            console.log("--> Filtering "+ users.length +" users. KnownLogins are " + Object.keys(knownLogins).length);
+            var newUsers = [];
+            users.forEach(function(user) {
+                if ( ! isAKnownUser(user) ) {
+                    newUsers.push(user);
+                    markLoginAsKnown(user.login);
+                }
+            });
+            console.log("--> Filtered " + (users.length - newUsers.length) + " users. Now knownLogins are " + Object.keys(knownLogins).length);
+            return newUsers;
+        };
+
+        var analizeUsers = function(users, deferred, userType) {
+            console.log("analazing " + users.length + " " + userType + "s");
+            users = filterUsed(users);
+            if ( users.length === 0 ) {
+                deferred.resolve();
+            }
+            populateUsersData(users, deferred, userType);
+        };
+
+        var fetchCollaborators = function() {
+            var deferred  = $q.defer();
+            $collaborators.query({repo: repo, owner: owner}, function(users) {
+                analizeUsers(users, deferred, 'collaborator');
+            });
+            return deferred.promise;
+        };
+
+        var fetchWatchers = function() {
+            var deferred  = $q.defer();
+            $watchers.query({repo: repo, owner: owner}, function(users) {
+                analizeUsers(users, deferred, 'watcher');
+            });
+            return deferred.promise;
+        };
+
+        var fetchStargazers = function() {
+            var deferred  = $q.defer();
+            $stargazers.query({repo: repo, owner: owner}, function(users) {
+                analizeUsers(users, deferred, 'stargazer');
+            });
+            return deferred.promise;
+        };
+
+        var collaboratorsPromise = fetchCollaborators(),
+            watchersPromise = fetchWatchers(),
+            stargazersPromise = fetchStargazers();
+
+        var promiseChain = new PromiseChain(function() {
+            console.log("main deferred resolved with " + mainUsers.length + " users");
+            mainDeferred.resolve(mainUsers);
+        });
+
+        promiseChain.addPromise(collaboratorsPromise);
+        promiseChain.addPromise(watchersPromise);
+        promiseChain.addPromise(stargazersPromise);
+
+        return mainDeferred.promise;
+    };
+
+    var searchByOrg = function(organization) {
+        var def = $q.defer(),
+            users = [],
+            reposLeft = 0,
+            knownLogins = {};
+
+        $repositories.query({org: organization}, function(repos) {
+            console.log("Got " + repos.length + " repos");
+
+            reposLeft = repos.length;
+
+            var analizeRepo = function(repo) {
+                console.log("searching for repo "+ repo.name);
+
+                var promise = searchByRepo(repo.owner.login, repo.name, knownLogins);
+
+                promise.then(function(u) {
+                    console.log("Added users from repo " + repo.name + " ( " + u.length + " - " + Object.keys(knownLogins).length + "known logins )");
+                    users = users.concat(u);
+                    reposLeft--;
+                    if ( reposLeft === 0 ) {
+                        def.resolve(users);
+                    }
+                });
+            };
+
+            repos.forEach(analizeRepo);
+        });
+
+        return def.promise;
+    };
+
+    return {
+        searchByRepo: searchByRepo,
+        searchByOrg: searchByOrg
+    }
+
 }]);
 
 
@@ -331,55 +495,3 @@ myApp.filter('notInOrganization', function() {
         return out;
     }
 });
-
-/*
-myApp.filter('collaborator', function() {
-    return function(input, enabled) {
-        if( ! enabled ) {
-            return input;
-        }
-
-        var out = [];
-        input.forEach(function(item) {
-            if ( item.collaborator ) {
-                out.push(item);
-            }
-        });
-
-        return out;
-    }
-});
-
-myApp.filter('watcher', function() {
-    return function(input, enabled) {
-        if( ! enabled ) {
-            return input;
-        }
-
-        var out = [];
-        input.forEach(function(item) {
-            if ( item.collaborator ) {
-                out.push(item);
-            }
-        });
-
-        return out;
-    }
-});
-
-myApp.filter('stargazer', function() {
-    return function(input, enabled) {
-        if( ! enabled ) {
-            return input;
-        }
-
-        var out = [];
-        input.forEach(function(item) {
-            if ( item.collaborator ) {
-                out.push(item);
-            }
-        });
-
-        return out;
-    }
-});  */
