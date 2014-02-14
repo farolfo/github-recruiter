@@ -269,7 +269,8 @@ myApp.factory('globalInterceptor', ['$q', '$injector', function($q, $injector){
             return response;
         }, function(response){
             if ( response.status === 403 ) {
-                $injector.get('$state').transitionTo('error.forbidden');
+                var headers = response.headers();
+                $injector.get('$state').go('error', {time: headers['x-ratelimit-reset']});
             }
             return $q.reject(response);
         });
@@ -298,15 +299,11 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
             }
         })
         .state('error', {
-            url: "/error",
+            url: "/error?time",
             templateUrl: "partials/error.forbidden.html",
-            controller: function($scope) {
-            }
-        })
-        .state('error.forbidden', {
-            url: "/error/forbidden",
-            templateUrl: "partials/error.forbidden.html",
-            controller: function($scope) {
+            controller: function($scope, $stateParams) {
+                var timeRemain = $stateParams.time * 1000 - (new Date().getTime());
+                $scope.time = new Date(timeRemain).getMinutes();
             }
         })
         .state('search.organization', {
