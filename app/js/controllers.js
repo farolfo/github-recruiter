@@ -98,105 +98,6 @@ myApp.factory('$repositories', ['$resource', 'TokenHandler', function($resource,
     return resource;
 }]);
 
-     /*
-myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', '$stargazers', '$q', '$organizations', '$watchers', function($users, $collaborators, $repositories, $stargazers, $q, $organizations, $watchers) {
-    var searchByRepo = function(owner, repo, knownLogins) {
-            var deferred = $q.defer();
-
-            knownLogins = ( knownLogins === undefined ? {} : knownLogins );
-
-            $watchers.query({repo: repo, owner: owner}, function(collaborators) {
-                var users = [],
-                    collaboratorsPending = collaborators.length,
-                    checkIfFinished = function() {
-                        collaboratorsPending--;
-                        if ( collaboratorsPending === 0 ) {
-                            console.log('resolved repo ' + repo);
-                            deferred.resolve(users);
-                        }
-                    };
-
-                collaborators.forEach(function(collaborator) {
-                    var userPromise;
-
-                    if ( ! isAKnownLogin(collaborator, knownLogins) ) {
-                        userPromise = getUser(collaborator);
-                        markLoginAsKnown(collaborator, knownLogins);
-                    } else {
-                        checkIfFinished();
-                    }
-
-                    if ( userPromise !== undefined ) {
-                        userPromise.then(
-                        function(user) {
-                            users.push(user);
-                            checkIfFinished();
-                        }, checkIfFinished);
-                    }
-                });
-            });
-
-            return deferred.promise;
-        },
-        isAKnownLogin = function(collaborator, knownLogins) {
-            return knownLogins[collaborator.login];
-        },
-        markLoginAsKnown = function(collaborator, knownLogins) {
-            knownLogins[collaborator.login] = true;
-        },
-        getUser = function(collaborator) {
-            var deferred = $q.defer();
-            $users.get({user: collaborator.login}, function(user) {
-                if ( user.name || user.email ) {
-                    console.log('resolving user ' + user.name);
-                    $organizations.query({user: user.login}, function(orgs) {
-                        user.organizations = orgs;
-                        deferred.resolve(user);
-                    });
-                } else {
-                    deferred.reject();
-                }
-            });
-            return deferred.promise;
-        };
-
-    return {
-        searchByRepo: searchByRepo,
-
-        searchByOrg: function(organization) {
-            var deferred = $q.defer(),
-                users = [],
-                knownLogins = {};
-
-            $repositories.query({org: organization}, function(repositories) {
-                var repositoriesPending = repositories.length,
-                    checkIfFinished = function() {
-                        console.log("repository " + repositoriesPending);
-                        repositoriesPending--;
-                        if ( repositoriesPending === 0 ) {
-                            console.log("resolved organization");
-                            deferred.resolve(users);
-                        }
-                    };
-
-                repositories.forEach(function(repo) {
-                    var repoPromise = searchByRepo(repo.owner.login, repo.name, knownLogins);
-
-                    repoPromise.then(
-                        function(newUsers) {
-                            users = users.concat(newUsers);
-                            checkIfFinished();
-                        },
-                        checkIfFinished
-                    );
-                });
-            });
-
-            return deferred.promise;
-        }
-    };
-}]);         */
-
 var PromiseChain = function(callback) {
     var promisesLeft = 0;
 
@@ -361,9 +262,21 @@ myApp.factory('$githubRecruiter', ['$users', '$collaborators', '$repositories', 
 
 }]);
 
+myApp.factory('globalInterceptor', function($q){
+    return function(promise){
 
+        return promise.then(function(response){
+            return response;
+        }, function(response){
+            debugger
+            return $q.reject(response);
+        });
+    }
+});
 
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
+
+    $httpProvider.responseInterceptors.push('globalInterceptor');
 
     $urlRouterProvider.otherwise("search/organization");
 
