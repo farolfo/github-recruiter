@@ -33,16 +33,18 @@ border-top-right-radius: 10px;" ng-show="results">
     </div>
 
     <div id="resultsContainer">
-        <div class="search-loading" ng-show="recruiting">
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
+        <div id="centerResultsContainer">
+            <div class="search-loading" ng-show="recruiting">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
             </div>
-        </div>
 
-        <div ng-repeat="result in results | notInOrganization:organization:notInOrganizationEnabled">
-            <search-result result="result"></search-result>
+            <div ng-repeat="result in results | notInOrganization:organization:notInOrganizationEnabled">
+                <search-result result="result"></search-result>
+            </div>
         </div>
     </div>
 </div>

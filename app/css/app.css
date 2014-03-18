@@ -147,35 +147,39 @@
 }
 
 #resultsContainer {
-    margin-top: 2em;
+    margin-top: 4em;
+    width: 100%;
+    background-color: grey;
+    position: relative;
+}
+
+#centerResultsContainer {
+    background-color: white;
+    width: 64em;
+    border: 1px solid black;
+    margin: 0 auto;
+    padding-top: 3em;
 }
 
 #resultsContainer .search-result {
-    position: relative;
-    background-color: #f5f5f5;
-    border: 1px solid #b6b6b6;
+    display: block;
+    padding: 0px;
+    width: 38em;
+    height: 10.5em;
+    border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    width: 35em;
-    height: 10em;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1em;
+    margin: 1em auto;
+    border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
+    position: relative;
 }
 
-#resultsContainer .search-result:after {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    background: white;
-    -moz-border-radius: 70px;
-    -webkit-border-radius: 70px;
-    border-radius: 70px;
-    content: '';
-    top: 0.5em;
-    left: 0.5em;
-    border: 1px solid #b6b6b6;
+#resultsContainer .search-result:hover {
+    background-color: #e3e5ff;
 }
 
 #resultsContainer .search-result img {
@@ -215,6 +219,11 @@
     position: absolute;
     top: 0.5em;
     right: 1em;
+    color: grey;
+}
+
+#resultsContainer .search-result .search-linkedin-container:hover {
+    color: dodgerblue;
 }
 
 #resultsContainer .search-result .search-github-container {
