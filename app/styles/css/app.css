@@ -1,0 +1,257 @@
+.header {
+  position: relative;
+  background-image: -moz-linear-gradient(#f9f9f9, #f3f3f3);
+  background-image: -webkit-linear-gradient(#f9f9f9, #f3f3f3);
+  background-image: linear-gradient(#f9f9f9, #f3f3f3);
+  background-repeat: repeat-x;
+  height: 13em;
+  width: 100%;
+  border-bottom: 1px solid #e5e5e5;
+}
+.headerToolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 2.5em;
+  border-bottom: 1px solid #e5e5e5;
+}
+.headerLabel {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif;
+  text-shadow: 0 1px 0 #fff;
+  font-size: 13px;
+  font-weight: bold;
+  color: #333333;
+  text-decoration: none;
+  float: right;
+  margin-right: 2em;
+  margin-top: 0.8em;
+  top: 1em;
+}
+.headerLabel:hover {
+  color: #4183c4;
+  text-decoration: none;
+}
+.headerLabel.last {
+  margin-right: 6%;
+}
+.octocatImage {
+  background-image: url("../img/inspectocat.png");
+  width: 18em;
+  height: 18em;
+  background-size: 100% 100%;
+  top: 0em;
+  left: 4%;
+  position: absolute;
+}
+.githubLogo {
+  background-image: url("../img/GitHub-Logo.png");
+  width: 16em;
+  height: 4em;
+  background-size: 100% 100%;
+  top: 6em;
+  left: 89%;
+  position: absolute;
+}
+.recruiterLogo {
+  width: 4em;
+  font-size: 5em;
+  height: 1em;
+  background-size: 100% 100%;
+  top: -18px;
+  left: 103%;
+  position: absolute;
+  font-family: 'Yesteryear', cursive;
+  color: #210347;
+}
+#errorContainer {
+  width: 60em;
+  height: 17em;
+  position: relative;
+  margin: auto;
+  margin-top: 6em;
+}
+#errorContainer img {
+  width: 17em;
+  position: absolute;
+  top: 0;
+  left: 1em;
+}
+#errorContainer h3 {
+  position: absolute;
+  top: 1.5em;
+  left: 11em;
+}
+#errorContainer p {
+  position: absolute;
+  top: 6.4em;
+  left: 19em;
+}
+.searchContainer {
+  min-width: 29em;
+  width: 50%;
+  margin: 4.5em auto auto auto;
+  padding-bottom: 2em;
+}
+.searchContainer .formContainer {
+  margin-top: 2em;
+  margin-left: 2em;
+  margin-right: 2em;
+  position: relative;
+}
+.searchContainer .formContainer .message {
+  position: absolute;
+  left: 0.5em;
+  top: 3.2em;
+}
+.searchContainer .formContainer .inputContainer {
+  position: absolute;
+  right: 6em;
+  left: 0;
+  top: 0;
+}
+.searchContainer .formContainer .inputContainer #ownerQuery {
+  width: 40%;
+  display: inline-block;
+}
+.searchContainer .formContainer .inputContainer #repositoryQuery {
+  width: 57%;
+  display: inline-block;
+}
+.searchContainer .formContainer button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+#resultsContainer {
+  margin-top: 4em;
+  width: 100%;
+  background-color: grey;
+  position: relative;
+}
+#centerResultsContainer {
+  background-color: white;
+  width: 64em;
+  border: 1px solid black;
+  margin: 0 auto;
+  padding-top: 3em;
+}
+#resultsContainer .search-result {
+  display: block;
+  padding: 0px;
+  width: 38em;
+  height: 10.5em;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  margin: 1em auto;
+  border-color: #eeeeee #dddddd #bbbbbb;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
+  position: relative;
+}
+#resultsContainer .search-result:hover {
+  background-color: #e3e5ff;
+}
+#resultsContainer .search-result img {
+  position: absolute;
+  top: 1em;
+  left: 2.5em;
+  width: 8em;
+  height: 8em;
+  border: 1px solid #c5c5c9;
+}
+#resultsContainer .search-result .name {
+  position: absolute;
+  top: 1.5em;
+  left: 11.5em;
+}
+#resultsContainer .search-result .email {
+  position: absolute;
+  top: 2.5em;
+  left: 11.5em;
+}
+#resultsContainer .search-result .login {
+  position: absolute;
+  top: 4.5em;
+  left: 13.5em;
+}
+#resultsContainer .search-result .company {
+  position: absolute;
+  top: 5.8em;
+  left: 13.5em;
+}
+#resultsContainer .search-result .search-linkedin-container {
+  position: absolute;
+  top: 0.5em;
+  right: 1em;
+  color: grey;
+}
+#resultsContainer .search-result .search-linkedin-container:hover {
+  color: dodgerblue;
+}
+#resultsContainer .search-result .search-github-container {
+  position: absolute;
+  top: 2em;
+  right: 1em;
+}
+#resultsContainer .search-result .search-linkedin-container i {
+  font-size: 1.1em;
+}
+.resume {
+  font-weight: 300;
+  width: 65em;
+  position: absolute;
+  top: 10.5em;
+  left: 20em;
+}
+.spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
+}
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #333;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+@-webkit-keyframes bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes bouncedelay {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}
