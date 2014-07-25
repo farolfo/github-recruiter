@@ -37,7 +37,7 @@
   margin-right: 6%;
 }
 .octocatImage {
-  background-image: url("../img/inspectocat.png");
+  background-image: url("../../img/inspectocat.png");
   width: 18em;
   height: 18em;
   background-size: 100% 100%;
@@ -46,7 +46,7 @@
   position: absolute;
 }
 .githubLogo {
-  background-image: url("../img/GitHub-Logo.png");
+  background-image: url("../../img/GitHub-Logo.png");
   width: 16em;
   height: 4em;
   background-size: 100% 100%;
