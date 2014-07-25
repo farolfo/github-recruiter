@@ -22,11 +22,12 @@
 <body>
   <div class="header">
       <div class="headerToolbar">
+          <a ui-sref="search.organization"><div class="githubLogo"><div class="recruiterLogo">recruiter</div></div></a>
           <a class="headerLabel" href="https://github.com/farolfo/github-recruiter" target="_blank"><i class="fa fa-github"></i> Developers</a>
-          <a class="headerLabel" ui-sref="about">What is this?</a>
+          <a class="headerLabel" >What is this?</a>
       </div>
-      <a ui-sref="search.organization"><div class="octocatImage"><div class="githubLogo"><div class="recruiterLogo">recruiter</div></div></div></a>
-      <label class="resume">List all contributors, stargazers and watchers of your repositories, filter them to see the ones that are not in your organization and start recruiting !</label>
+      <div class="octocatImage"><div class="hiding-octocat"></div></div>
+      <label class="resume">looking for developers?<p>List all your watchers stargazers, contributors and whoever that got involved with your GitHub projects</p></label>
   </div>
 
   <div ui-view></div>
@@ -34,9 +35,9 @@
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
-  <script src="lib/angular/angular.js"></script>
-  <script src="lib/angular/angular-resource.js"></script>
-  <script src="lib/angular/angular-ui-router.js"></script>
+  <script src="../bower_components/angular/angular.js"></script>
+  <script src="../bower_components/angular-resource/angular-resource.js"></script>
+  <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>

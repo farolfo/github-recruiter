@@ -1,0 +1,12 @@
+{
+  "name": "github-recruiter",
+  "version": "0.0.0",
+  "homepage": "https://github.com/farolfo/github-recruiter",
+  "dependencies": {
+        "angular": "~1.2.14",
+        "angular-ui-router": "0.2.8-bowratic-tedium",
+        "angular-resource": "~1.2.0"
+  },
+  "description": "TBD",
+  "license": "MIT"
+}

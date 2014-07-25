@@ -359,7 +359,13 @@ myApp.directive('searchResult', function () {
             result: '='
         },
 
-        templateUrl: './partials/directives/searchResult.html'
+        templateUrl: './partials/directives/searchResult.html',
+
+        link: function(scope, elem, attrs) {
+            var container = angular.element(elem).find('.search-result');
+
+            container.css('background','url(' + scope.result.avatar_url + ') center center no-repeat');
+        }
     };
 });
 
