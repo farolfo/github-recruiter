@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Lane";
-  src: url('/app/fonts/LANENAR_.ttf') format("truetype");
+  src: url('../../fonts/LANENAR_.ttf') format("truetype");
 }
 .header {
   position: relative;
