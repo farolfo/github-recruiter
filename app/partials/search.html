@@ -7,44 +7,15 @@
         <div ui-view></div>
     </div>
 
-    <div class="filters" style="width: 13em;
-padding-top: 0.5em;
-padding-left: 1em;
-padding-right: 1em;
-background-color: rgb(239, 232, 248);
-padding-bottom: 1em;
-position: fixed;
-top: 40%;
-left: 0;
-border-bottom-right-radius: 10px;
-border-top-right-radius: 10px;" ng-show="results">
-        <h4>Filters</h4>
-        <form class="form-inline" role="form">
-            <div class="checkbox">
-                <small>
-                    <input type="checkbox" ng-model="notInOrganizationEnabled"> Not in this organization:
-                </small>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="i.e: mulesoft" ng-model="organization">
-                <small class="warn">This will only work for those users who have their organization as public data</small>
-            </div>
-        </form>
-    </div>
-
     <div id="resultsContainer">
-        <div id="centerResultsContainer">
-            <div class="search-loading" ng-show="recruiting">
-                <div class="spinner">
-                    <div class="bounce1"></div>
-                    <div class="bounce2"></div>
-                    <div class="bounce3"></div>
-                </div>
-            </div>
-
-            <div ng-repeat="result in results | notInOrganization:organization:notInOrganizationEnabled">
-                <search-result result="result"></search-result>
+        <div class="search-loading" ng-show="recruiting">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
             </div>
         </div>
+
+        <search-result result="result" ng-repeat="result in results"></search-result>
     </div>
 </div>
