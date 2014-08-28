@@ -6,6 +6,13 @@ It's intended to be used as a tool for recruitng.
 
 You can see the work in progress here in http://farolfo.github.io/github-recruiter
 
+###TODO
+* fixing style
+* Building backend API in Mule
+* Integratino with jobvite
+* About page
+* User ranking (get a way to valuate a _commit_, contributions to opensource projects and rank users) !!!!!!!
+
 ## Notice
 
 All trademarks, service marks, and copyrights are property of their respective owners. GitHub® is a registered trademark of the GitHub Inc.
