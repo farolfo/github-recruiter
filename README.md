@@ -10,17 +10,17 @@ You can see the work in progress [here](http://farolfo.github.io/github-recruite
 ###Basic Usage
 
 1. Go to http://farolfo.github.io/github-recruiter/app/index.html#/search/repository, (to reduce the number of calls that you do we encourage the usage of the _search by repository_ instead of _by organization_, which produces many more calls than the other mode).
-2. Type your GitHub™'s organization name and the repo that you want to analyze. It is important to note that only _public repos_ will work for now (think that doing this analisis in a private repo does not make much sense cause the people that contributed there probably is already working for you).
-3. Wait a bit and you will see the candidates that the GitHub™ Recruiter shows you. If they provide their name in their public data, you will see a link to his linkedin as well.
+2. Type your GitHub™'s organization name and the repo that you want to analyze. It is important to note that only _public repos_ will work for now (think that doing this analysis in a private repo does not make much sense cause the people that contributed there probably are already working for you).
+3. Wait a bit and you will see the candidates that the GitHub™ Recruiter shows you. If they provide their name in their public GitHub™'s data, you will see a link to his Linkedin as well.
 
-Take into account that the number of calls to the GitHub API are limited per day so if you have no answers from the GitHub™ Recruiter after hiting _search_ and waiting a long time, this might be the case. A proper error message will come soon, for now [open the browser dev console](https://developer.chrome.com/devtools/docs/console#opening-the-console) to check this.
+Take into account that the number of calls to the GitHub™ API are limited per day so if you have no answers from the GitHub™ Recruiter after hiting _search_ and waiting a long time, this might be the case. A proper error message will come soon, for now [open the browser dev console](https://developer.chrome.com/devtools/docs/console#opening-the-console) to check this.
 
 ## TODO
 * Improve error handling
 * Add filters (i.e.: not to display the people that already belongs to my org, filter by location)
-* Fixing style
-* Building backend API, for now it is all made in client side
-* Integratino with jobvite
+* Fix style
+* Build backend API, for now it is all made in client side
+* Integration with jobvite
 * About page
 * User ranking (find a way to valuate a _commit_ or contribution to an opensource project and then rank users) !!!!!!!
 
