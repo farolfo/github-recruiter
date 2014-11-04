@@ -8,13 +8,13 @@
         <div class="search-github-container" ng-show="result.html_url">
             <a href="{{result.html_url}}" target="_blank"><i class="fa fa-github"></i></a>
         </div>
-    </div>
 
-    <div class="result-info">
-        <label class="name">{{result.name}}</label>
-        <label class="email">{{result.email}}</label>
-        <small class="login">GitHub username: {{result.login}}</small>
-        <small class="company" ng-show="result.company">Company: {{result.company}}</small>
+        <div class="user-info">
+            <label class="name">{{result.name}}</label>
+            <label class="email">{{result.email}}</label>
+            <small class="login">GitHub username: {{result.login}}</small>
+            <small class="company" ng-show="result.company">Company: {{result.company}}</small>
+        </div>
     </div>
 
 </div>

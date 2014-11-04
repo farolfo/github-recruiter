@@ -140,6 +140,7 @@
   margin-top: 45px;
   width: 100%;
   position: relative;
+  text-align: center;
 }
 #centerResultsContainer {
   background-color: white;
@@ -169,7 +170,7 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 5rem;
+  height: 22rem;
   background-color: #DDDCDC;
   opacity: 0.6;
 }
@@ -184,30 +185,32 @@
   height: 8em;
   border: 1px solid #c5c5c9;
 }
-#resultsContainer .search-result .name {
-  position: absolute;
-  top: 1.5em;
-  left: 11.5em;
+#resultsContainer .search-result .result-header .user-info {
+  position: relative;
+  text-align: left;
+  padding-left: 1.5rem;
+  padding-top: 2rem;
 }
-#resultsContainer .search-result .email {
-  position: absolute;
-  top: 2.5em;
-  left: 11.5em;
+#resultsContainer .search-result .result-header .user-info .name {
+  font-size: x-large;
+  display: block;
 }
-#resultsContainer .search-result .login {
-  position: absolute;
-  top: 4.5em;
-  left: 13.5em;
+#resultsContainer .search-result .result-header .user-info .email {
+  font-size: large;
+  display: block;
 }
-#resultsContainer .search-result .company {
-  position: absolute;
-  top: 5.8em;
-  left: 13.5em;
+#resultsContainer .search-result .result-header .user-info .login {
+  font-size: large;
+  display: block;
+}
+#resultsContainer .search-result .result-header .user-info .company {
+  font-size: large;
+  display: block;
 }
 #resultsContainer .search-result .search-linkedin-container {
   position: absolute;
-  top: 0.5em;
-  right: 1em;
+  bottom: 0.5em;
+  right: 4em;
   color: grey;
 }
 #resultsContainer .search-result .search-linkedin-container:hover {
@@ -215,11 +218,11 @@
 }
 #resultsContainer .search-result .search-github-container {
   position: absolute;
-  top: 2em;
-  right: 1em;
+  bottom: 0.5em;
+  right: 0.7em;
 }
-#resultsContainer .search-result .search-linkedin-container i {
-  font-size: 1.1em;
+#resultsContainer .search-result i {
+  font-size: 3.1em;
 }
 .resume {
   font-size: 90px;
