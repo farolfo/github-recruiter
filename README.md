@@ -1,7 +1,7 @@
 GitHub™ Recruiter
 ================
 
-Recruiting tool that searches the persons that got involved with some particular GitHub™ repos of yours. Find those people that starred, watched or contributed to any project of yours.
+Recruiting tool that finds the persons that got involved with some particular GitHub™ repos of yours. Find those people that starred, watched or contributed to any of your projects.
 
 The intention of this application is to be used as an open source tool for recruitng.
 
